@@ -1,22 +1,38 @@
 # reverse_shell_duckyscript
-A PEN testing script to demonstrate how quickly a reverse shell can be created with the rubber ducky
 
-THIS SCRIPT IS INTENDED FOR USE ON SYSTEMS YOU OWN OR HAVE BEEN GIVEN PERMISSION TO USE, I TAKE NO RESPONSIBILITIES FOR ANY MISUSE
+# Penetration Testing Script: Rubber Ducky Reverse Shell Demonstration
 
-This script uses netcat, make sure it is ready on on of your machines
+# DISCLAIMER: This script is intended for use on systems you own or have permission to use. I take no responsibility for any misuse.
 
--How to use-
+# Overview:
+# This script demonstrates how quickly a reverse shell can be created using the Rubber Ducky.
+# It utilizes netcat for communication. Ensure netcat is installed and ready on one of your machines.
 
-Step 1: in rs.ps1, change {IP HERE} and {PORT HERE} to your ip and port of choosing (you will have to port forward this to the machine you are listening to)
+# Instructions:
 
-Step 2: either host the file somewhere youself or upload it to a file hosting website, I use anonfiles. (make sure you get the download link, not the page link)
+# Step 1: Customize the reverse shell script (rs.ps1):
+# Replace "{IP HERE}" and "{PORT HERE}" with your chosen IP address and port.
+# You'll need to port forward this to the machine you're listening to.
 
-step 3: in ducky.txt, put the link in the "LINK HERE" spot
+# Step 2: Host the file or use a file hosting service:
+# Host rs.ps1 file somewhere or upload it to a file hosting website (e.g., anonfiles).
+# Ensure you get the direct download link, not the page link.
 
-step 4: encode the payload
+# Step 3: Modify ducky.txt:
+# Insert the download link in the "LINK HERE" section of ducky.txt.
 
-step 5: on your machine with netcat, type the following command: Nc -lnvp {PORT YOU ARE FORWADING TO THIS MACHINE}
+# Step 4: Encode the payload:
+# Use a Rubber Ducky encoder to encode ducky.txt into a payload.
 
-step 6: if all goes well, the rubber ducky should start a hidden powershell session that you have full, remote control of a powershell session
+# Step 5: Listen for incoming connections:
+# On your machine with netcat, run the following command:
+# nc -lnvp {PORT YOU ARE FORWARDING TO THIS MACHINE}
 
-some notes: this wont work if they have any anti-virus that isn't windows defender, additionally some networks may block the connection, but it will work on normal home networks ect.
+# Step 6: Execute the payload:
+# Plug in the Rubber Ducky to the target machine.
+# If all goes well, the Rubber Ducky will start a hidden PowerShell session, granting you full remote control.
+
+# Notes:
+# - This may not work if the target system has antivirus software other than Windows Defender.
+# - Some networks may block the connection, but it should work on normal home networks, etc.
+
